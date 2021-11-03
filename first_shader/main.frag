@@ -1,4 +1,10 @@
+float Circle (vec2 uv, vec2 p, float r, float blur)
+{
+    float d = length(uv - p);
+    float c = smoothstep(r, r - blur, d);
 
+    return c;
+}
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
@@ -6,15 +12,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 uv = fragCoord/iResolution.xy; //0 -> 1
 
     //Map centre to origin
-    uv -= .5;                           //-0.5 -> 0.5
+    uv -= 0.5;                           //-0.5 -> 0.5
 
     //Multiply uv.x by aspect ratio of screen
     uv.x *= iResolution.x/iResolution.y;
 
-    float d = length(uv);
-    float r = 0.3;
+    float c = Circle(uv, vec2(0.2, -0.2), 0.4, 0.05);
 
-    float c = smoothstep(r, r-0.01, d);
+    c -= Circle(uv, vec2(0.2, -0.1), 0.1, 0.01);
 
+    //Output colour per pixel
     fragColor = vec4(vec3(c), 1.0);
 }
