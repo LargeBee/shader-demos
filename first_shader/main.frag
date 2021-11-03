@@ -20,7 +20,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float c = Circle(uv, vec2(0, 0), 0.4, 0.05);
 
     float speed = 1.0;
-    vec2 pos = vec2(sin(iTime * speed) / 4.0, cos(iTime * speed) / 4.0);
+    float rotDist = 4.0;
+    vec2 pos = vec2(sin(iTime * speed) / rotDist, cos(iTime * speed) / rotDist);
     c -= Circle(uv, pos, 0.1, 0.01);
 
     //Output colour per pixel
