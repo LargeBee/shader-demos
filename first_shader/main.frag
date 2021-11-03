@@ -17,9 +17,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     //Multiply uv.x by aspect ratio of screen
     uv.x *= iResolution.x/iResolution.y;
 
-    float c = Circle(uv, vec2(0.2, -0.2), 0.4, 0.05);
+    float c = Circle(uv, vec2(0, 0), 0.4, 0.05);
 
-    c -= Circle(uv, vec2(0.2, -0.1), 0.1, 0.01);
+    float speed = 1.0;
+    vec2 pos = vec2(sin(iTime * speed) / 4.0, cos(iTime * speed) / 4.0);
+    c -= Circle(uv, pos, 0.1, 0.01);
 
     //Output colour per pixel
     fragColor = vec4(vec3(c), 1.0);
