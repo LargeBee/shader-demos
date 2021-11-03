@@ -1,3 +1,5 @@
+
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     //Normalize coordinates to values 0 -> 1
@@ -10,9 +12,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     uv.x *= iResolution.x/iResolution.y;
 
     float d = length(uv);
-    float c = d;
+    float r = 0.3;
 
-    if(d < .3) c = 1.; else c = 0.;
+    float c = smoothstep(r, r-0.01, d);
 
     fragColor = vec4(vec3(c), 1.0);
 }
