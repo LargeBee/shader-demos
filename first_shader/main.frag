@@ -1,3 +1,12 @@
+/*
+Used Part 1 and 2 of the tutorial by the art of code
+https://www.youtube.com/watch?v=u5HAYVHsasc
+https://www.youtube.com/watch?v=GgGBR4z8C9o
+
+and borrowed some code form this shader
+https://www.shadertoy.com/view/XsGfWw
+*/
+
 float Circle (vec2 uv, vec2 p, float r, float blur)
 {
     float d = length(uv - p);
