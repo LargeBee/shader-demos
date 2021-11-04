@@ -13,6 +13,15 @@ float line(vec2 uv, vec2 p1, vec2 p2, float t)
 	return smoothstep(t, 0.5*t, d);
 }
 
+mat3 rotationZ(float angle)
+{
+    return mat3(
+        cos(angle),-sin(angle),0,
+        sin(angle),cos(angle),0,
+        0,0,0
+    );
+}
+
 mat3 rotationY(float angle)
 {
     return mat3(
@@ -60,33 +69,43 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     );
 
 
-    float angle = 0.9*iTime; //Modify?
-    float scale = 1.0;
+    float angle = iTime; //Modify?
+    float scale = 0.5;
 
     //rotate and project points with matrix maths and use time as angle
-    mat3 outPoints;
+    vec3 outPoints;
     vec2 projectedPoints[points.length()];
     for (int i = 0; i < points.length(); ++i)
     {
-        outPoints = mat3(points[i].x, points[i].y, points[i].z, vec4(0), vec4(0));
+        outPoints = points[i];
         outPoints *= rotationY(angle)
-                * rotationX(angle) 
+                * rotationX(angle)
                 * scaler(scale);
         
-        projectedPoints[i] = vec2(outPoints[0].xy);
+        projectedPoints[i] = vec2(outPoints.xy);
     }
     
     float colOut = 0.0;
+    bool valid;
     //Add lines to output value
     for (int i = 0; i < points.length(); ++i)
     {
         for (int j = 0; j < points.length(); ++j)
         {
-            colOut += line(
-                uv, 
-                projectedPoints[i].xy, 
-                projectedPoints[j].xy, 
-                0.01);
+            valid = false;
+            if (-points[i].x == points[j].x && points[i].yz == points[j].yz) {valid = true;}
+            if (-points[i].y == points[j].y && points[i].xz == points[j].xz) {valid = true;}
+            if (-points[i].z == points[j].z && points[i].xy == points[j].xy) {valid = true;}
+
+            if(valid)
+            {
+                colOut += line(
+                    uv, 
+                    projectedPoints[i].xy, 
+                    projectedPoints[j].xy, 
+                    0.01);
+            }
+            
         }
     }
 
