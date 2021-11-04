@@ -13,44 +13,36 @@ float line(vec2 uv, vec2 p1, vec2 p2, float t)
 	return smoothstep(t, 0.5*t, d);
 }
 
-mat4 rotationY(float angle)
+mat3 rotationY(float angle)
 {
-    return mat4(
-        cos(angle),0,sin(angle),0,
-        0,1,0,0,
-        -sin(angle),0,cos(angle),0,
-        0,0,0,0
+    return mat3(
+        cos(angle),0,sin(angle),
+        0,1,0,
+        -sin(angle),0,cos(angle)
     );
 }
 
-mat4 rotationX(float angle)
+mat3 rotationX(float angle)
 {
-    return mat4(
-        1,0,0,0,
-        0,cos(angle),sin(angle),0,
-        0,-sin(angle),cos(angle),0,
-        0,0,0,0
+    return mat3(
+        1,0,0,
+        0,cos(angle),sin(angle),
+        0,-sin(angle),cos(angle)
     );
 }
 
-mat4 scaler(float scale)
+mat3 scaler(float scale)
 {
-    return mat4(
-        scale,0,0,0,
-        0,scale,0,0,
-        0,0,scale,0,
-        0,0,0,0
+    return mat3(
+        scale,0,0,
+        0,scale,0,
+        0,0,scale
     );
 }
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
-    //Normalize coordinates to values 0 -> 1
-    vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y; //0 -> 1
-
-
-    //Multiply uv.x by aspect ratio of screen
-    uv.x *= iResolution.x/iResolution.y;
+    vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y;
 
     //Define set of points
     vec3 points[] = vec3[](
@@ -68,15 +60,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     );
 
 
-    float angle = 0.4*iTime; //Modify?
-    float scale = 50.0;
-    //rotate points with matrix maths and use time as angle
-    mat4 outPoints;
+    float angle = 0.9*iTime; //Modify?
+    float scale = 1.0;
+
+    //rotate and project points with matrix maths and use time as angle
+    mat3 outPoints;
     vec2 projectedPoints[points.length()];
     for (int i = 0; i < points.length(); ++i)
     {
-        outPoints = mat4(points[i].x, points[i].y, points[i].z, 0, vec4(0), vec4(0), vec4(0));
-        outPoints *= rotationY(angle) 
+        outPoints = mat3(points[i].x, points[i].y, points[i].z, vec4(0), vec4(0));
+        outPoints *= rotationY(angle)
                 * rotationX(angle) 
                 * scaler(scale);
         
@@ -89,7 +82,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     {
         for (int j = 0; j < points.length(); ++j)
         {
-            colOut += line(uv, projectedPoints[i].xy, projectedPoints[j].xy, 0.01);
+            colOut += line(
+                uv, 
+                projectedPoints[i].xy, 
+                projectedPoints[j].xy, 
+                0.01);
         }
     }
 
