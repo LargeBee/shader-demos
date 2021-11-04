@@ -3,7 +3,7 @@ Used Part 1 and 2 of the tutorial by the art of code
 https://www.youtube.com/watch?v=u5HAYVHsasc
 https://www.youtube.com/watch?v=GgGBR4z8C9o
 
-and borrowed some code form this shader
+and borrowed some code from this shader
 https://www.shadertoy.com/view/XsGfWw
 */
 
