@@ -61,8 +61,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3(1.0,1.0,1.0)
     );
 
+
+    float angle = iTime; //Modify?
+    float scale = 50.0;
     //rotate points with matrix maths and use time as angle
-    
+    mat4 outPoints;
+    for (int i = 0; i < points.length(); ++i)
+    {
+        outPoints = mat4(points[i].x, points[i].y, points[i].z, 0, vec4(0), vec4(0), vec4(0));
+        outPoints *= rotationY(angle) 
+                * rotationX(angle) 
+                * scaler(scale) 
+                * projection();
+    }
     
     //Add lines to output value
 
