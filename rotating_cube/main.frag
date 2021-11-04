@@ -43,8 +43,6 @@ mat4 scaler(float scale)
     );
 }
 
-
-
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     //Normalize coordinates to values 0 -> 1
@@ -84,8 +82,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 * scaler(scale);
     }
     
+    float colOut = 0.0;
     //Add lines to output value
+    for (int i = 0; i < points.length(); ++i)
+    {
+        for (int j = 0; j < points.length(); ++j)
+        {
+            //colOut += line(uv);
+        }
+    }
 
     //Output colour per pixel
-    fragColor = vec4(vec3(1.0), 1.0);
+    fragColor = vec4(vec3(colOut), 1.0);
 }
