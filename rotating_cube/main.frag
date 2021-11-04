@@ -13,6 +13,28 @@ float line(vec2 uv, vec2 p1, vec2 p2, float t)
 	return smoothstep(t, 0.5*t, d);
 }
 
+mat4 projection()
+{
+    return mat4(1.0);
+}
+
+mat4 rotationY(float angle)
+{
+    return mat4(1.0);
+}
+
+mat4 rotationX(float angle)
+{
+    return mat4(1.0);
+}
+
+mat4 scaler(float scale)
+{
+    return mat4(1.0);
+}
+
+
+
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     //Normalize coordinates to values 0 -> 1
@@ -38,9 +60,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3(-1.0,1.0,1.0),
     vec3(1.0,1.0,1.0)
     );
+
     //rotate points with matrix maths and use time as angle
-    //Draw lines between points
     
+    
+    //Add lines to output value
 
     //Output colour per pixel
     fragColor = vec4(vec3(1.0), 1.0);
