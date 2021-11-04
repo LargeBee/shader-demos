@@ -13,24 +13,34 @@ float line(vec2 uv, vec2 p1, vec2 p2, float t)
 	return smoothstep(t, 0.5*t, d);
 }
 
-mat4 projection()
-{
-    return mat4(1.0);
-}
-
 mat4 rotationY(float angle)
 {
-    return mat4(1.0);
+    return mat4(
+        cos(angle),0,sin(angle),0,
+        0,1,0,0,
+        -sin(angle),0,cos(angle),0,
+        0,0,0,0
+    );
 }
 
 mat4 rotationX(float angle)
 {
-    return mat4(1.0);
+    return mat4(
+        1,0,0,0,
+        0,cos(angle),sin(angle),0,
+        0,-sin(angle),cos(angle),0,
+        0,0,0,0
+    );
 }
 
 mat4 scaler(float scale)
 {
-    return mat4(1.0);
+    return mat4(
+        scale,0,0,0,
+        0,scale,0,0,
+        0,0,scale,0,
+        0,0,0,0
+    );
 }
 
 
@@ -71,8 +81,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         outPoints = mat4(points[i].x, points[i].y, points[i].z, 0, vec4(0), vec4(0), vec4(0));
         outPoints *= rotationY(angle) 
                 * rotationX(angle) 
-                * scaler(scale) 
-                * projection();
+                * scaler(scale);
     }
     
     //Add lines to output value
