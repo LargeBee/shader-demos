@@ -46,10 +46,8 @@ mat4 scaler(float scale)
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     //Normalize coordinates to values 0 -> 1
-    vec2 uv = fragCoord/iResolution.xy; //0 -> 1
+    vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y; //0 -> 1
 
-    //Map centre to origin
-    uv -= 0.5;                           //-0.5 -> 0.5
 
     //Multiply uv.x by aspect ratio of screen
     uv.x *= iResolution.x/iResolution.y;
@@ -70,16 +68,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     );
 
 
-    float angle = iTime; //Modify?
+    float angle = 0.4*iTime; //Modify?
     float scale = 50.0;
     //rotate points with matrix maths and use time as angle
     mat4 outPoints;
+    vec2 projectedPoints[points.length()];
     for (int i = 0; i < points.length(); ++i)
     {
         outPoints = mat4(points[i].x, points[i].y, points[i].z, 0, vec4(0), vec4(0), vec4(0));
         outPoints *= rotationY(angle) 
                 * rotationX(angle) 
                 * scaler(scale);
+        
+        projectedPoints[i] = vec2(outPoints[0].xy);
     }
     
     float colOut = 0.0;
@@ -88,10 +89,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     {
         for (int j = 0; j < points.length(); ++j)
         {
-            //colOut += line(uv);
+            colOut += line(uv, projectedPoints[i].xy, projectedPoints[j].xy, 0.01);
         }
     }
 
+    const vec3 backColour  = vec3(0.3);
+    const vec3 lineColour1 = vec3(0.35,0.95,0.51);
+    
+    vec3 colour = mix(backColour, lineColour1, colOut);
     //Output colour per pixel
-    fragColor = vec4(vec3(colOut), 1.0);
+    fragColor = vec4(colour, 1.0);
 }
