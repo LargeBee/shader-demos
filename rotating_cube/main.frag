@@ -9,6 +9,7 @@ float line(vec2 uv, vec2 p1, vec2 p2, float t)
 {
     vec2 g = p2 - p1;
     vec2 h = uv - p1;
+    t /= iResolution.y;
     float d = length(h - g * clamp(dot(g, h) / dot(g,g), 0.0, 1.0));
 	return smoothstep(t, 0.5*t, d);
 }
@@ -103,16 +104,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     uv, 
                     projectedPoints[i].xy, 
                     projectedPoints[j].xy, 
-                    0.01);
+                    4.0);
             }
             
         }
     }
 
     const vec3 backColour  = vec3(0.3);
-    const vec3 lineColour1 = vec3(0.35,0.95,0.51);
+    const vec3 lineColour = vec3(0.35,0.95,0.51);
     
-    vec3 colour = mix(backColour, lineColour1, colOut);
+    vec3 colour = mix(backColour, lineColour, colOut);
     //Output colour per pixel
     fragColor = vec4(colour, 1.0);
 }
