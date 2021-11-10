@@ -56,19 +56,33 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     //Define set of points
     vec3 points[] = vec3[](
-    vec3(-1.0,-1.0,-1.0),
-    vec3(-1.0,1.0,-1.0),
+    vec3(-1.0,-1.0,-1.0),   //Corner 0
+    vec3(1.0,-1.0,-1.0),    //Corner 1
 
-    vec3(1.0,-1.0,-1.0),
-    vec3(1.0,1.0,-1.0),
+    vec3(1.0,1.0,-1.0),     //Corner 2
+    vec3(-1.0,1.0,-1.0),    //Corner 3
 
-    vec3(1.0,-1.0,1.0),
-    vec3(-1.0,-1.0,1.0),
+    vec3(-1.0,-1.0,1.0),    //Corner 4
+    vec3(1.0,-1.0,1.0),     //Corner 5
     
-    vec3(-1.0,1.0,1.0),
-    vec3(1.0,1.0,1.0)
+    vec3(1.0,1.0,1.0),      //Corner 6
+    vec3(-1.0,1.0,1.0)      //Corner 7
     );
 
+    ivec2 edges[] = ivec2[](
+        ivec2(0, 1),
+        ivec2(0, 3),
+        ivec2(0, 4),
+        ivec2(1, 2),
+        ivec2(1, 5),
+        ivec2(2, 3),
+        ivec2(2, 6),
+        ivec2(3, 7),
+        ivec2(4, 5),
+        ivec2(4, 7),
+        ivec2(5, 6),
+        ivec2(6, 7)
+    );
 
     float angle = iTime; //Modify?
     float scale = 0.5;
@@ -89,25 +103,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float colOut = 0.0;
     bool valid;
     //Add lines to output value
-    for (int i = 0; i < points.length(); ++i)
+    for (int i = 0; i < edges.length(); ++i)
     {
-        for (int j = 0; j < points.length(); ++j)
-        {
-            valid = false;
-            if (-points[i].x == points[j].x && points[i].yz == points[j].yz) {valid = true;}
-            if (-points[i].y == points[j].y && points[i].xz == points[j].xz) {valid = true;}
-            if (-points[i].z == points[j].z && points[i].xy == points[j].xy) {valid = true;}
-
-            if(valid)
-            {
-                colOut += line(
-                    uv, 
-                    projectedPoints[i].xy, 
-                    projectedPoints[j].xy, 
-                    4.0);
-            }
-            
-        }
+        colOut += line(
+            uv, 
+            projectedPoints[edges[i].x].xy, 
+            projectedPoints[edges[i].y].xy, 
+            4.0
+        );
     }
 
     const vec3 backColour  = vec3(0.3);
